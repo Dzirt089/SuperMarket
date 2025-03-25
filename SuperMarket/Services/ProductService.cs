@@ -1,11 +1,7 @@
 ﻿using SuperMarket.Model;
 using SuperMarket.Services.Interfaces;
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Collections.ObjectModel;
 
 namespace SuperMarket.Services
 {
@@ -18,7 +14,7 @@ namespace SuperMarket.Services
 		/// Get the list of products.
 		/// </summary>
 		/// <returns></returns>
-		public List<Product> GetProducts()
+		public ObservableCollection<Product> GetProducts()
 		{
 			return
 			[
@@ -46,7 +42,7 @@ namespace SuperMarket.Services
 					Quantity = 50
 				}
 			];
-		} 
+		}
 	}
 
 }

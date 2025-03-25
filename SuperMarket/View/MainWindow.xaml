@@ -1,0 +1,60 @@
+﻿<Window x:Class="SuperMarket.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SuperMarket"
+		xmlns:vm="clr-namespace:SuperMarket.ViewModel"
+		xmlns:views="clr-namespace:SuperMarket.View" 
+		xmlns:converters="clr-namespace:SuperMarket.Converters"
+		mc:Ignorable="d"
+        Title="Продуктовый магазин" 
+        Height="600" Width="900"
+        WindowStartupLocation="CenterScreen">
+
+	<Window.Resources>
+		<converters:BoolToWidthConverter x:Key="BoolToWidthConverter"/>
+	</Window.Resources>
+
+	<Grid>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="Auto"/>
+			<ColumnDefinition Width="*"/>
+		</Grid.ColumnDefinitions>
+
+		<!-- Навигационная панель -->
+		<Border Grid.Column="0" Background="#2C3E50" 
+                Width="{Binding IsMenuExpanded, Converter={StaticResource BoolToWidthConverter}, ConverterParameter=200|50}">
+			<StackPanel>
+				<Button Content="☰" Command="{Binding ToggleMenuCommand}" Style="{StaticResource MenuButtonStyle}"/>
+				<Button Content="Магазин" Command="{Binding NavigateToShopCommand}" Style="{StaticResource NavButtonStyle}"/>
+				<Button Content="Корзина" Command="{Binding NavigateToCartCommand}" Style="{StaticResource NavButtonStyle}"/>
+				<Button Content="Профиль" Command="{Binding NavigateToProfileCommand}" Style="{StaticResource NavButtonStyle}"/>
+			</StackPanel>
+		</Border>
+
+		<!-- Основной контент -->
+		<Grid Grid.Column="1">
+			<Grid.RowDefinitions>
+				<RowDefinition Height="Auto"/>
+				<RowDefinition Height="*"/>
+			</Grid.RowDefinitions>
+
+			<TextBlock Text="{Binding CurrentPageTitle}" FontSize="24" HorizontalAlignment="Center" Margin="10"/>
+
+			<ContentControl Grid.Row="1" Content="{Binding NavigationService.CurrentViewModel}">
+				<ContentControl.Resources>
+					<DataTemplate DataType="{x:Type vm:ShopViewModel}">
+						<views:ShopPage/>
+					</DataTemplate>
+					<DataTemplate DataType="{x:Type vm:CartViewModel}">
+						<views:CartPage/>
+					</DataTemplate>
+					<DataTemplate DataType="{x:Type vm:ProfileViewModel}">
+						<views:ProfilePage/>
+					</DataTemplate>
+				</ContentControl.Resources>
+			</ContentControl>
+		</Grid>
+	</Grid>
+</Window>

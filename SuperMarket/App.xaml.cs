@@ -3,9 +3,8 @@ using Microsoft.Extensions.Hosting;
 
 using SuperMarket.Services;
 using SuperMarket.Services.Interfaces;
+using SuperMarket.ViewModel;
 
-using System.Configuration;
-using System.Data;
 using System.Windows;
 
 namespace SuperMarket;
@@ -16,6 +15,10 @@ namespace SuperMarket;
 public partial class App : Application
 {
 	public static IHost Host { get; private set; }
+
+	/// <summary>
+	/// App
+	/// </summary>
 	public App()
 	{
 		Host = Microsoft.Extensions.Hosting.Host.CreateDefaultBuilder()
@@ -24,10 +27,33 @@ public partial class App : Application
 				ConfigureServices(services);
 			}).Build();
 	}
+
 	//Add Services in DI
 	private static void ConfigureServices(IServiceCollection services)
 	{
-		services.AddScoped<IProductService, ProductService>();
+		services.AddSingleton<IProductService, ProductService>();
+		services.AddSingleton<INavigationService, NavigationService>();
+	}
+
+	/// <summary>
+	/// OnStartup
+	/// </summary>
+	/// <param name="e"></param>
+	protected override void OnStartup(StartupEventArgs e)
+	{
+		try
+		{
+			var navigationService = new NavigationService();
+			var mainVM = new MainViewModel(navigationService);
+
+			new MainWindow { DataContext = mainVM }.Show();
+
+			base.OnStartup(e);
+		}
+		catch (Exception ex)
+		{
+			MessageBox.Show(ex.Message);
+		}
 	}
 }
 
