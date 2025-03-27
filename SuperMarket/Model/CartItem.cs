@@ -5,7 +5,7 @@ namespace SuperMarket.Model
 	/// <summary>
 	/// The item in the cart.
 	/// </summary>
-	class CartItem : ObservableObject
+	public class CartItem : ObservableObject
 	{
 		/// <summary>
 		/// The product in the cart.

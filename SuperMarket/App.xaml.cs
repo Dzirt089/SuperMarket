@@ -4,6 +4,7 @@ using Microsoft.Extensions.Hosting;
 using SuperMarket.Services;
 using SuperMarket.Services.Interfaces;
 using SuperMarket.ViewModel;
+using SuperMarket.Views;
 
 using System.Windows;
 
@@ -33,6 +34,10 @@ public partial class App : Application
 	{
 		services.AddSingleton<IProductService, ProductService>();
 		services.AddSingleton<INavigationService, NavigationService>();
+		services.AddSingleton<ShopViewModel>();
+		services.AddSingleton<CartViewModel>();
+		services.AddSingleton<ProfileViewModel>();
+		services.AddSingleton<MainViewModel>();
 	}
 
 	/// <summary>
@@ -43,11 +48,9 @@ public partial class App : Application
 	{
 		try
 		{
-			var navigationService = new NavigationService();
-			var mainVM = new MainViewModel(navigationService);
-
+			var navigationService = Host.Services.GetRequiredService<INavigationService>();
+			MainViewModel mainVM = Host.Services.GetRequiredService<MainViewModel>();
 			new MainWindow { DataContext = mainVM }.Show();
-
 			base.OnStartup(e);
 		}
 		catch (Exception ex)
